@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CARTI - 你的座驾人格是什么？</title>
+  <!-- 外部样式 -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- ============================================================
+         Landing Page（首页）
+         ============================================================ -->
+    <div id="landing" class="page landing active">
+      <div class="badge">Forza Horizon × MBTI</div>
+
+      <div class="logo">CARTI</div>
+      <div class="tagline">你的座驾人格是什么？</div>
+
+      <div class="hero-card">
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-num">16</div>
+            <div class="stat-label">精选车款</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">48</div>
+            <div class="stat-label">道题目</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">16</div>
+            <div class="stat-label">种人格</div>
+          </div>
+        </div>
+
+        <div class="categories">
+          <span class="category-tag">🇺🇸 美式肌肉</span>
+          <span class="category-tag">🇯🇵 JDM 传奇</span>
+          <span class="category-tag">🇮🇹 意大利烈马</span>
+          <span class="category-tag">🇩🇪 德系性能</span>
+        </div>
+      </div>
+
+      <div class="author-section">
+        <p><strong>作者与说明</strong></p>
+        <p>本测试由唯心制作，仅供娱乐与交流，不构成任何游戏攻略或竞技建议。</p>
+        <p>测试内容基于《极限竞速：地平线5》车辆特性，车辆版权归 Turn 10 Studios / Playground Games / Xbox Game Studios 所有。</p>
+        <p><strong>关于本测试</strong></p>
+        <p>16辆车，48道题。每道题对应一个你和某辆车的契合度维度。做完后系统会进行匹配，告诉你你最接近哪辆。</p>
+        <div class="categories">
+          <span class="category-tag">🇺🇸 美式肌肉</span>
+          <span class="category-tag">🇯🇵 JDM 传奇</span>
+          <span class="category-tag">🇮🇹 意大利烈马</span>
+          <span class="category-tag">🇩🇪 德系性能</span>
+        </div>
+      </div>
+
+      <button class="start-btn" onclick="startQuiz()">开始测试</button>
+
+      <div class="footer">CARTI — 地平线座驾人格测试</div>
+    </div>
+
+    <!-- ============================================================
+         Quiz Page（答题页）
+         ============================================================ -->
+    <div id="quiz" class="page">
+      <div class="quiz-header">
+        <div class="quiz-header-row">
+          <button id="backBtn" class="back-btn" onclick="prevQuestion()" style="display:none">← 上一题</button>
+          <div class="progress-text">
+            <span id="currentQ">1</span> / <span id="totalQ">48</span>
+            <span class="dimension-tag" id="dimensionTag"></span>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div id="progressFill" class="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div id="questionNumber" class="question-number">Q 1</div>
+        <div id="questionText" class="question-text"></div>
+        <div id="options" class="options"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         Result Page（结果页）
+         ============================================================ -->
+    <div id="result" class="page">
+      <div class="result-header">
+        <div class="result-label">你的座驾人格</div>
+        <div id="resultMbti" class="result-mbti"></div>
+        <div id="resultTypeGroup" class="result-type-group"></div>
+        <div id="resultCarName" class="result-car-name"></div>
+        <div id="resultCarType" class="result-car-type"></div>
+      </div>
+
+      <!-- 四维百分比条 (ARKTI风格) -->
+      <div id="traitsSection" class="traits-section">
+        <!-- EI -->
+        <div class="trait-row" data-dim="EI" data-left="E" data-right="I" data-color="#9b59b6">
+          <div class="trait-percent"></div>
+          <div class="trait-track">
+            <span class="trait-center-marker"></span>
+            <span class="trait-handle"></span>
+          </div>
+          <div class="trait-labels">
+            <span>外向 / E</span>
+            <span>内向 / I</span>
+          </div>
+        </div>
+        <!-- SN -->
+        <div class="trait-row" data-dim="SN" data-left="S" data-right="N" data-color="#3498db">
+          <div class="trait-percent"></div>
+          <div class="trait-track">
+            <span class="trait-center-marker"></span>
+            <span class="trait-handle"></span>
+          </div>
+          <div class="trait-labels">
+            <span>实感 / S</span>
+            <span>直觉 / N</span>
+          </div>
+        </div>
+        <!-- TF -->
+        <div class="trait-row" data-dim="TF" data-left="T" data-right="F" data-color="#e74c3c">
+          <div class="trait-percent"></div>
+          <div class="trait-track">
+            <span class="trait-center-marker"></span>
+            <span class="trait-handle"></span>
+          </div>
+          <div class="trait-labels">
+            <span>思考 / T</span>
+            <span>情感 / F</span>
+          </div>
+        </div>
+        <!-- JP -->
+        <div class="trait-row" data-dim="JP" data-left="J" data-right="P" data-color="#f39c12">
+          <div class="trait-percent"></div>
+          <div class="trait-track">
+            <span class="trait-center-marker"></span>
+            <span class="trait-handle"></span>
+          </div>
+          <div class="trait-labels">
+            <span>判断 / J</span>
+            <span>知觉 / P</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <img id="resultImage" class="result-image" src="" alt="">
+        <div id="resultTags" class="result-tags"></div>
+        <div id="resultDescription" class="result-description"></div>
+        <div class="mbti-explanation">
+          <h3>人格解读</h3>
+          <div id="mbtiExplanation"></div>
+        </div>
+      </div>
+
+      <div class="share-section">
+        <button class="share-btn" onclick="shareResult()">分享结果</button>
+        <button class="retry-btn" onclick="retry()">再测一次</button>
+      </div>
+
+      <!-- 16 车契合度排名 -->
+      <div class="ranking-section">
+        <div class="ranking-title">契合度排名</div>
+        <div id="rankingList" class="ranking-list"></div>
+        <div id="rankingNote" class="ranking-note">
+          <span>计算说明：</span>每匹配一个相同MBTI字母得25%，同车辆分类加成5%，精确匹配加5%。显示 <strong>100%+</strong> 的车代表MBTI与你的完全一致。
+        </div>
+      </div>
+
+      <div class="gallery-section">
+        <div class="gallery-title">全部 16 款座驾</div>
+        <div id="gallery" class="gallery-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 外部脚本 -->
+  <script src="js/script.js"></script>
+</body>
+</html>
